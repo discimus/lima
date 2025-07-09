@@ -20,6 +20,13 @@ def fetch(channel, channel_name):
     except Exception as e:
         logging.error(F"{channel_name} error", exc_info=True)
         return []
+
+def fetch_headline(channel, channel_name):
+    try:
+        return channel.fetch_headline()
+    except Exception as e:
+        logging.error(F"{channel_name} error", exc_info=True)
+        return []
     
 def persist_articles_in_sqlite(articles, path):
     try:
@@ -85,6 +92,9 @@ def main():
     parser.add_argument('--uol', required=False, action='store_true', help='News channel UOL')
     parser.add_argument('--infomoney', required=False, action='store_true', help='News channel Info Money')
 
+    parser.add_argument('--g1-hl', required=False, action='store_true', help='Headline from channel G1')
+    parser.add_argument('--uol-hl', required=False, action='store_true', help='Headline from channel Uol')
+
     parser.add_argument('--output-json', required=False, action='store_true', help='Output format as JSON')
     parser.add_argument('--sqlite-path', required=False, type=str, help='Path to persist articles in SQLite file')
 
@@ -101,6 +111,11 @@ def main():
         articles += fetch(channel=uol, channel_name='UOL')
     if args.infomoney:
         articles += fetch(channel=infomoney, channel_name='Info Money')
+        
+    if args.g1_hl:
+        articles += fetch_headline(channel=g1, channel_name='G1')        
+    if args.uol_hl:
+        articles += fetch_headline(channel=uol, channel_name='G1')
 
     #   OUTPUT AS JSON
     if args.output_json:

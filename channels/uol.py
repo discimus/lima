@@ -71,3 +71,35 @@ def fetch():
                 continue
 
     return noticias
+
+def fetch_headline():
+    r = requests.get('https://www.uol.com.br/')
+    
+    noticias = []
+
+    if (r.ok):
+        soup = BeautifulSoup(r.content, 'html.parser')
+        dom = etree.HTML(str(soup))
+
+        for a in [soup.select_one('a[class*="headlineMain"]')]:
+            try:
+                if not a.text:
+                    continue
+
+                titulo = str(a.text).strip()
+
+                if not titulo:
+                    continue
+                
+                href = a.attrs['href']
+
+                if not href:
+                    continue
+
+                link = str(href).strip()
+
+                noticias.append([titulo, link])
+            except:
+                continue
+
+    return noticias
