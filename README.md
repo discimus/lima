@@ -3,7 +3,7 @@ Para instalação das dependências utilizar
 pip install -r requirements.txt
 ```
 
-A aplicação funciona como linha de comando, basta executar
+A aplicação funciona por linha de comando, basta executar
 
 ```
 python3 app.py <canal> <output desejado>
