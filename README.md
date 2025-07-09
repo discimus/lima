@@ -1,7 +1,12 @@
+Para instalação das dependências utilizar
+```
+pip install -r requirements.txt
+```
+
 A aplicação funciona como linha de comando, basta executar
 
 ```
-python3 app.py
+python3 app.py <canal> <output desejado>
 ```
 
 Informando os parâmetros desejados.
@@ -25,6 +30,8 @@ Para output utilizar
 Exemplos:
 ```
 python app.py --infomoney --output-json
+```
+```
 python app.py --g1 --uol --poder360 --infomoney --sqlite-path="out.db"
 ```
 
