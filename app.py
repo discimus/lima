@@ -92,8 +92,8 @@ def main():
     parser.add_argument('--uol', required=False, action='store_true', help='News channel UOL')
     parser.add_argument('--infomoney', required=False, action='store_true', help='News channel Info Money')
 
-    parser.add_argument('--g1-hl', required=False, action='store_true', help='Headline from channel G1')
-    parser.add_argument('--uol-hl', required=False, action='store_true', help='Headline from channel Uol')
+    parser.add_argument('--g1-headline', required=False, action='store_true', help='Headline from channel G1')
+    parser.add_argument('--uol-headline', required=False, action='store_true', help='Headline from channel Uol')
 
     parser.add_argument('--output-json', required=False, action='store_true', help='Output format as JSON')
     parser.add_argument('--sqlite-path', required=False, type=str, help='Path to persist articles in SQLite file')
@@ -112,9 +112,9 @@ def main():
     if args.infomoney:
         articles += fetch(channel=infomoney, channel_name='Info Money')
         
-    if args.g1_hl:
+    if args.g1_headline:
         articles += fetch_headline(channel=g1, channel_name='G1')        
-    if args.uol_hl:
+    if args.uol_headline:
         articles += fetch_headline(channel=uol, channel_name='G1')
 
     #   OUTPUT AS JSON
