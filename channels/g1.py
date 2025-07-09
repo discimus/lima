@@ -44,12 +44,14 @@ def fetch_headline():
     if (r.ok):
         try:
             content1 = re.search('"items":(\[.*\])', r.content.decode())
-            content2 = re.search('"children".*?"content":(\{.*?\}{2})', content1.group(0))
-            content3 = re.search('"url":\"(.*?)\"', content2.group(0))
-            content4 = re.search('"title":\"(.*?)\"', content2.group(0))
+
+            parsed = re.sub('"aggregatedPosts"\s*:\s*\[\s*\{[\s\S]*?\}\s*\](,?)\s*', '', content1.group(0))
+
+            content3 = re.search('"url":\"(.*?)\"', parsed)
+            content4 = re.search('"title":\"(.*?)\"', parsed)
             
-            url = content3.group(1)
-            title = content4.group(1)
+            url = content3.group(0)
+            title = content4.group(0)
             
             if url and title:
                 noticias.append([title, url])
