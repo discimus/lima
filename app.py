@@ -7,7 +7,7 @@ from channels import (
     otempo
 )
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlescapy import sqlescape
 
 import argparse
@@ -36,7 +36,7 @@ def fetch_headline(channel, channel_name):
         logging.error(F"{channel_name} error", exc_info=True)
         return []
     
-def persist_articles_in_sqlite(articles, path):
+def persist_articles_in_sqlite(articles, path, offset_plus=0, offset_minus=0):
     try:
         if not os.path.exists(path):
             with open(path, 'w'): pass
@@ -58,7 +58,7 @@ def persist_articles_in_sqlite(articles, path):
             cursor.execute(query)
             conn.commit()
 
-            now = datetime.now()
+            now = datetime.now() + timedelta(hours=offset_plus) - timedelta(hours=offset_minus)
             current_date = now.strftime('%Y-%m-%d %H:%M:%S')
 
             for [title, link] in articles:
@@ -108,6 +108,9 @@ def main():
     parser.add_argument('--output-json', required=False, action='store_true', help='Output format as JSON')
     parser.add_argument('--sqlite-path', required=False, type=str, help='Path to persist articles in SQLite file')
 
+    parser.add_argument('--offset-plus', required=False, type=int, help='Offset GMT/UTC +')
+    parser.add_argument('--offset-minus', required=False, type=int, help='Offset GMT/UTC -')
+
     args = parser.parse_args()
 
     articles = []
@@ -136,9 +139,16 @@ def main():
     if args.output_json:
         print(json.dumps(articles))
 
+    offsetplus = args.offset_plus if args.offset_plus else 0
+    offsetminus = args.offset_minus if args.offset_minus else 0
+
     #   PERSIST IN SQLITE FILE
     if args.sqlite_path and str(args.sqlite_path).strip():
-        persist_articles_in_sqlite(articles=articles, path=args.sqlite_path)
+        persist_articles_in_sqlite(
+            articles=articles, 
+            path=args.sqlite_path,
+            offset_plus=offsetplus,
+            offset_minus=offsetminus)
     else:
         logging.error(F"SQLite error: invalid path", exc_info=True)
 
