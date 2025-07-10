@@ -1,4 +1,12 @@
-from channels import g1, poder360, uol, infomoney
+from channels import (
+    g1, 
+    poder360, 
+    uol, 
+    infomoney,
+    diario_de_minas,
+    otempo
+)
+
 from datetime import datetime
 from sqlescapy import sqlescape
 
@@ -94,6 +102,8 @@ def main():
 
     parser.add_argument('--g1-headline', required=False, action='store_true', help='Headline from channel G1')
     parser.add_argument('--uol-headline', required=False, action='store_true', help='Headline from channel Uol')
+    parser.add_argument('--diariodeminas-headline', required=False, action='store_true', help='Headline from channel Diário de Minas')
+    parser.add_argument('--otempo-headline', required=False, action='store_true', help='Headline from channel O Tempo')
 
     parser.add_argument('--output-json', required=False, action='store_true', help='Output format as JSON')
     parser.add_argument('--sqlite-path', required=False, type=str, help='Path to persist articles in SQLite file')
@@ -113,9 +123,14 @@ def main():
         articles += fetch(channel=infomoney, channel_name='Info Money')
         
     if args.g1_headline:
-        articles += fetch_headline(channel=g1, channel_name='G1')        
+        articles += fetch_headline(channel=g1, channel_name='G1')
     if args.uol_headline:
-        articles += fetch_headline(channel=uol, channel_name='G1')
+        articles += fetch_headline(channel=uol, channel_name='Uol')
+    if args.diariodeminas_headline:
+        articles += fetch_headline(channel=diario_de_minas, channel_name='Diário de Minas')
+        articles += fetch_headline(channel=uol, channel_name='Uol')
+    if args.otempo_headline:
+        articles += fetch_headline(channel=otempo, channel_name='O Tempo')
 
     #   OUTPUT AS JSON
     if args.output_json:
