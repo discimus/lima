@@ -5,7 +5,8 @@ from channels import (
     infomoney,
     diario_de_minas,
     otempo,
-    opovo
+    opovo,
+    gazeta_do_povo
 )
 
 from datetime import datetime, timedelta
@@ -106,6 +107,7 @@ def main():
     parser.add_argument('--diariodeminas-headline', required=False, action='store_true', help='Headline from channel Diário de Minas')
     parser.add_argument('--otempo-headline', required=False, action='store_true', help='Headline from channel O Tempo')
     parser.add_argument('--opovo-headline', required=False, action='store_true', help='Headline from channel O Povo')
+    parser.add_argument('--gazetadopovo-headline', required=False, action='store_true', help='Headline from channel O Gazeta do Povo')
 
     parser.add_argument('--output-json', required=False, action='store_true', help='Output format as JSON')
     parser.add_argument('--sqlite-path', required=False, type=str, help='Path to persist articles in SQLite file')
@@ -137,6 +139,9 @@ def main():
         articles += fetch_headline(channel=otempo, channel_name='O Tempo')
     if args.opovo_headline:
         articles += fetch_headline(channel=opovo, channel_name='O Povo')
+        articles += fetch_headline(channel=otempo, channel_name='O Tempo')
+    if args.gazetadopovo_headline:
+        articles += fetch_headline(channel=gazeta_do_povo, channel_name='Gazeta do Povo')
 
     #   OUTPUT AS JSON
     if args.output_json:
