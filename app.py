@@ -6,7 +6,9 @@ from channels import (
     diario_de_minas,
     otempo,
     opovo,
-    gazeta_do_povo
+    gazeta_do_povo,
+    amazonas1,
+    estadaomatogrosso
 )
 
 from datetime import datetime, timedelta
@@ -108,6 +110,8 @@ def main():
     parser.add_argument('--otempo-headline', required=False, action='store_true', help='Headline from channel O Tempo')
     parser.add_argument('--opovo-headline', required=False, action='store_true', help='Headline from channel O Povo')
     parser.add_argument('--gazetadopovo-headline', required=False, action='store_true', help='Headline from channel O Gazeta do Povo')
+    parser.add_argument('--amazonas1-headline', required=False, action='store_true', help='Headline from channel Amazonas1')
+    parser.add_argument('--estadaomatogrosso-headline', required=False, action='store_true', help='Headline from channel Estadão Mato Grosso')
 
     parser.add_argument('--output-json', required=False, action='store_true', help='Output format as JSON')
     parser.add_argument('--sqlite-path', required=False, type=str, help='Path to persist articles in SQLite file')
@@ -139,9 +143,12 @@ def main():
         articles += fetch_headline(channel=otempo, channel_name='O Tempo')
     if args.opovo_headline:
         articles += fetch_headline(channel=opovo, channel_name='O Povo')
-        articles += fetch_headline(channel=otempo, channel_name='O Tempo')
     if args.gazetadopovo_headline:
         articles += fetch_headline(channel=gazeta_do_povo, channel_name='Gazeta do Povo')
+    if args.amazonas1_headline:
+        articles += fetch_headline(channel=amazonas1, channel_name='Amazonas1')
+    if args.estadaomatogrosso_headline:
+        articles += fetch_headline(channel=estadaomatogrosso, channel_name='Estadão Mato Grosso')
 
     #   OUTPUT AS JSON
     if args.output_json:
@@ -152,13 +159,14 @@ def main():
 
     #   PERSIST IN SQLITE FILE
     if args.sqlite_path and str(args.sqlite_path).strip():
-        persist_articles_in_sqlite(
-            articles=articles, 
-            path=args.sqlite_path,
-            offset_plus=offsetplus,
-            offset_minus=offsetminus)
-    else:
-        logging.error(F"SQLite error: invalid path", exc_info=True)
+        try:
+            persist_articles_in_sqlite(
+                articles=articles, 
+                path=args.sqlite_path,
+                offset_plus=offsetplus,
+                offset_minus=offsetminus)
+        except:
+            logging.error(F"SQLite error: invalid path", exc_info=True)
 
 if __name__ == '__main__':
     main()
