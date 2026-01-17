@@ -12,7 +12,7 @@ def fetch_headline():
     noticias = []
 
     if (r.ok):
-        soup = BeautifulSoup(r.content, 'html.parser')
+        soup = BeautifulSoup(r.text, 'html.parser', from_encoding="utf-8")
         dom = etree.HTML(str(soup))
 
         query = """
