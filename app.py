@@ -12,7 +12,7 @@ from channels import (
 )
 
 from datetime import datetime, timedelta
-from sqlescapy import sqlescape
+from html import escape
 
 import argparse
 import json
@@ -66,8 +66,8 @@ def persist_articles_in_sqlite(articles, path, offset_plus=0, offset_minus=0):
             current_date = now.strftime('%Y-%m-%d %H:%M:%S')
 
             for [title, link] in articles:
-                parsed_title = sqlescape(title)
-                parsed_link = sqlescape(link)
+                parsed_title = escape(title)
+                parsed_link = escape(link)
 
                 query = f"""
                     insert into tb_article(
